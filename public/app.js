@@ -2,11 +2,11 @@ var app = angular.module('questionApp', ['ngRoute', 'ngResource']).config(['$rou
     $routeProvider
         // home page
         .when('/', {
-            templateUrl: 'views/home.html',
+            templateUrl: 'views/templates/home.html',
             controller: 'HomeCtrl'
         })
         .when('/:id', {
-            templateUrl: 'views/answers.html',
+            templateUrl: 'views/templates/answers.html',
             controller: 'AnswersCtrl'
         })
         .otherwise({

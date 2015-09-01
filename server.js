@@ -141,6 +141,6 @@ app.listen(3000, function() {
 app.use(express.static(__dirname + '/public')); // set the static files location 
 
 app.get('*', function(req, res) {
-    res.sendfile('./public/index.html'); // load our public/index.html file
+    res.sendFile(__dirname + '/public/views/index.html'); // load our public/index.html file
 });
 
