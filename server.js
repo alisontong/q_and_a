@@ -6,14 +6,14 @@ var express = require('express'),
     Question = require('./models/question'),
     Answer = require('./models/answer');
 
-// connect to mongodb
-mongoose.connect('mongodb://localhost/ask_anything');
-
 // configure body-parser
 app.use(bodyParser.urlencoded({
   extended: true
 }));
 app.use(bodyParser.json());
+
+// connect to mongodb
+mongoose.connect('mongodb://localhost/ask_anything');
 
 //// API ROUTES
 
