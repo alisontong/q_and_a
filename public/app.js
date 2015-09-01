@@ -50,18 +50,18 @@ app.controller('AnswersCtrl', ['$scope', 'Question', 'Answer', '$routeParams', f
     $scope.question = Question.get({id: id});
 
     $scope.createAnswer = function(){
-        Answer.save({id: $scope.question._id}, $scope.newAnswer);
+        Answer.save({questionId: $scope.question._id}, $scope.newAnswer);
         $scope.question.answers.push($scope.newAnswer);
         $scope.newAnswer = {};
     };
 
     $scope.updateAnswer = function(answer) {
-        Answer.update({id: $scope.question._id, ida: answer._id}, answer);
+        Answer.update({questionId: $scope.question._id, id: answer._id}, answer);
         answer.editForm = false;
     };
 
     $scope.deleteAnswer = function(answer) {
-        Answer.remove({id: $scope.question._id, ida: answer._id});
+        Answer.remove({questionId: $scope.question._id, id: answer._id});
         var answerIndex = $scope.question.answers.indexOf(answer);
         $scope.question.answers.splice(answerIndex, 1);
     }; 
@@ -76,7 +76,7 @@ app.service('Question', ['$resource', function ($resource) {
 }]);
 
 app.service('Answer', ['$resource', function ($resource) {
-    return $resource('/api/questions/:id/answers/:ida', { id: '@_id' }, {
+    return $resource('/api/questions/:questionId/answers/:id', { id: '@_id' }, {
     update: {
         method: 'PUT'
     }
