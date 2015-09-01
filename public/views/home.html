@@ -1,0 +1,35 @@
+<h2 class="text-center">Question App</h2>
+<hr>
+
+<!-- form to create new question -->
+<h4>Add New Question</h4>
+<form ng-submit="createQuestion()">
+  <div class="form-group">
+    <input type="text" ng-model="newQuestion.text" class="form-control" placeholder="Text" autofocus>
+  </div>
+  <input type="submit" value="Save Question" class="btn btn-default">
+</form>
+<hr>
+
+<!-- show all questions -->
+
+<div ng-repeat="question in questions">
+  <!-- question content -->
+  <div ng-hide="question.editForm">
+  <h5><a ng-href="{{question._id}}">{{question.text}}</a></h5>
+    
+    <!-- edit/delete buttons -->
+    <button ng-click="question.editForm = true" class="btn btn-default">Edit</button>
+    <button ng-click="deleteQuestion(question)" class="btn btn-default">Delete</button>
+  </div>
+  
+  <!-- form to edit question -->
+  <form ng-show="question.editForm" ng-submit="updateQuestion(question)">
+    <div class="form-group">
+      <input type="text" ng-model="question.text" class="form-control" placeholder="Text">
+    </div>
+    <input type="submit" value="Save question" class="btn btn-default">
+  </form>
+  <hr>
+</div>
+<!-- end ng-repeat -->

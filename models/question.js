@@ -1,10 +1,13 @@
-// models/question.js
-
 var mongoose = require('mongoose'),
-    Schema = mongoose.Schema;
+    Schema = mongoose.Schema,
+    Answer = require('./answer');
 
 var QuestionSchema = new Schema({
-  text: String
+  text: {
+    type: String,
+    required: true
+  },
+  answers: [Answer.schema]
 });
 
 var Question = mongoose.model('Question', QuestionSchema);

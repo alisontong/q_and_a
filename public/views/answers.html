@@ -1,0 +1,37 @@
+<h2 class="text-center">Question App</h2>
+<a href="/"><-- back</a>
+<hr>
+
+<h3>{{question.text}}</h3>
+
+<h5>Answers</h5>
+
+<hr>
+
+<div ng-repeat="answer in question.answers">
+
+  <div ng-hide="answer.editForm">
+    {{answer.content}}
+
+    <button ng-click="answer.editForm = true" class="btn btn-default">Edit</button>
+    <button ng-click="deleteAnswer(answer)" class="btn btn-default">Delete</button>
+  </div>
+
+  <!-- form to edit answer -->
+  <form ng-show="answer.editForm" ng-submit="updateAnswer(answer)">
+    <div class="form-group">
+      <input type="text" ng-model="answer.content" class="form-control" placeholder="Text">
+    </div>
+    <input type="submit" value="Save answer" class="btn btn-default">
+  </form>
+  <hr>
+</div>
+
+<!-- form to create new answer -->
+<h4>Add New Answer</h4>
+<form ng-submit="createAnswer()">
+  <div class="form-group">
+    <input type="text" ng-model="newAnswer.content" class="form-control" placeholder="Text" autofocus>
+  </div>
+  <input type="submit" value="Save Answer" class="btn btn-default">
+</form>

@@ -1,37 +1,84 @@
-angular.module('bookApp', ['ngResource'])
+var app = angular.module('questionApp', ['ngRoute', 'ngResource']).config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
+    $routeProvider
+        // home page
+        .when('/', {
+            templateUrl: 'views/home.html',
+            controller: 'HomeCtrl'
+        })
+        .when('/:id', {
+            templateUrl: 'views/answers.html',
+            controller: 'AnswersCtrl'
+        })
+        .otherwise({
+            redirectTo: '/'
+        });
 
-.controller('BooksCtrl', ['$scope', 'Book', function ($scope, Book) {
-    $scope.book = {};
-    $scope.books = [];
-    $scope.newBook = {};
+    $locationProvider.html5Mode({
+        enabled: true,
+        requireBase: false
+    });
+}]);
 
-    $scope.books = Book.query(); // returns all the books
+app.controller('HomeCtrl', ['$scope', 'Question', function ($scope, Question) {
+    $scope.question = {};
+    $scope.questions = [];
 
-    $scope.createBook = function(){
-        Book.save($scope.newBook);
-        $scope.newBook = {}; // clear new book object
+    $scope.questions = Question.query();
+
+    $scope.createQuestion = function(){
+        Question.save($scope.newQuestion);
+        $scope.questions.push($scope.newQuestion);
+        $scope.newQuestion = {};
     };
 
-    $scope.updateBook = function(book) {
-        Book.get({ id: book.id }, function() {
-            Book.update({id: book.id}, book);
-            book.editForm = false;
-        }); 
+    $scope.updateQuestion = function(question) {
+        Question.update({id: question._id}, question);
+        question.editForm = false;
     };
 
-    $scope.deleteBook = function(book) {
-        Book.remove({id:book.id});
-        var bookIndex = $scope.books.indexOf(book);
-        $scope.books.splice(bookIndex, 1);
+    $scope.deleteQuestion = function(question) {
+        Question.remove({id:question._id});
+        var questionIndex = $scope.questions.indexOf(question);
+        $scope.questions.splice(questionIndex, 1);
     };
     
-}])
+}]);
 
-.service('Book', ['$resource', function ($resource) {
-    return $resource('http://daretodiscover.herokuapp.com/books/:id', { id: '@_id' }, {
-      update: {
+app.controller('AnswersCtrl', ['$scope', 'Question', 'Answer', '$routeParams', function ($scope, Question, Answer, $routeParams) {
+    var id = $routeParams.id;
+
+    $scope.question = Question.get({id: id});
+
+    $scope.createAnswer = function(){
+        Answer.save({id: $scope.question._id}, $scope.newAnswer);
+        $scope.question.answers.push($scope.newAnswer);
+        $scope.newAnswer = {};
+    };
+
+    $scope.updateAnswer = function(answer) {
+        Answer.update({id: $scope.question._id, ida: answer._id}, answer);
+        answer.editForm = false;
+    };
+
+    $scope.deleteAnswer = function(answer) {
+        Answer.remove({id: $scope.question._id, ida: answer._id});
+        var answerIndex = $scope.question.answers.indexOf(answer);
+        $scope.question.answers.splice(answerIndex, 1);
+    }; 
+}]);
+
+app.service('Question', ['$resource', function ($resource) {
+    return $resource('/api/questions/:id', { id: '@_id' }, {
+    update: {
         method: 'PUT'
-      }
+    }
   });
 }]);
 
+app.service('Answer', ['$resource', function ($resource) {
+    return $resource('/api/questions/:id/answers/:ida', { id: '@_id' }, {
+    update: {
+        method: 'PUT'
+    }
+  });
+}]);
