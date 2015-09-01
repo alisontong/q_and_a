@@ -1,7 +1,6 @@
 // require express and other modules
 var express = require('express'),
     app = express(),
-    path = require('path'),
     bodyParser = require('body-parser'),
     mongoose = require('mongoose'),
     Question = require('./models/question'),
